@@ -3,9 +3,10 @@ package org.usfirst.frc.team304.robot;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
 import org.usfirst.frc.team304.robot.data.Sensors;
-import org.usfirst.frc.team304.robot.systems.DrivingSystem;
-import org.usfirst.frc.team304.robot.systems.LiftingSystem;
+import org.usfirst.frc.team304.robot.driving.DrivingSystem;
+import org.usfirst.frc.team304.robot.lifting.LiftingSystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +24,8 @@ public class Robot extends IterativeRobot {
 	Joystick controller;
 
 	RobotAI driver;
-
+	
+	@Override
 	public void robotInit() {
 		base = new DrivingSystem(RobotMap.lfVictor, RobotMap.lrVictor,
 				RobotMap.rfVictor, RobotMap.rrVictor);
@@ -35,7 +37,6 @@ public class Robot extends IterativeRobot {
 				RobotMap.switchRightIn, RobotMap.lifterSensor,
 				RobotMap.joystick);
 
-		tester = new PeriodicTester(sense);
 		driver = new RobotAI(sense, base, lifter);
 	}
 
@@ -46,9 +47,15 @@ public class Robot extends IterativeRobot {
 		driver.go();
 	}
 
+	@Override
+	public void testInit() {
+		tester = new PeriodicTester(sense);
+	}
+	
 	/**
 	 * This function is called periodically during test mode
 	 */
+	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 

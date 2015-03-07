@@ -1,14 +1,19 @@
 package org.usfirst.frc.team304.robot.data;
 
+import org.usfirst.frc.team304.robot.lifting.LiftingSystem;
+
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DataPreprocessor {
 	private Joystick controller;
 	private Sensors sensors;
+	private Dashboard dashboard;
 
-	public DataPreprocessor(Joystick controller, Sensors sensors) {
+	public DataPreprocessor(Joystick controller, Sensors sensors, Dashboard dashboard) {
 		this.controller = controller;
 		this.sensors = sensors;
+		this.dashboard = dashboard;
 	}
 
 	public boolean isLiftingUpPressed() {
@@ -88,5 +93,28 @@ public class DataPreprocessor {
 
 	public boolean seesLifter() {
 		return !sensors.getLifterSensorValue();
+	}
+	
+	public double getSpeedUp() {
+		double speed = dashboard.getLiftingUpSlider();
+		if (speed != 0) {
+			return speed;
+		} else {
+			return LiftingSystem.LIFT_DEFAULT;
+		}
+	}
+
+	public double getSpeedDown() {
+		double speed = -dashboard.getLiftingDownSlider();
+		if (speed != 0) {
+			return speed;
+		} else {
+			return -LiftingSystem.LIFT_DEFAULT;
+		}
+	}
+	
+	public double getKeepHeightForce() {
+		double value = dashboard.getKeepHeightSlider();
+		return (value > 0d) ? value : LiftingSystem.KEEP_HEIGHT_DEFAULT;
 	}
 }

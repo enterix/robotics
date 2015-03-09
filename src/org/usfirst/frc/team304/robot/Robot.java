@@ -12,13 +12,6 @@ import org.usfirst.frc.team304.robot.driving.DrivingSystem;
 import org.usfirst.frc.team304.robot.lifting.LiftingBot;
 import org.usfirst.frc.team304.robot.lifting.LiftingSystem;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
- */
 public class Robot extends IterativeRobot {
 	PeriodicTester tester;
 	DataPreprocessor data;
@@ -49,7 +42,7 @@ public class Robot extends IterativeRobot {
 		
 		LiftingBot lBot = new LiftingBot(lifter);
 		
-		manual = new ManualControl(dBot, lBot, data);
+		manual = new ManualControl(base, lifter, data);
 		bot = new BotControl(dBot, lBot, data);
 	}
 
@@ -60,6 +53,16 @@ public class Robot extends IterativeRobot {
 		else
 			manual.teleop();
 	}
+	
+	@Override
+	public void autonomousInit() {
+		//default task
+	};
+	
+	@Override
+	public void autonomousPeriodic() {
+		bot.teleop();
+	};
 
 	@Override
 	public void testInit() {

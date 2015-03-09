@@ -3,17 +3,28 @@ package org.usfirst.frc.team304.robot.data;
 import org.usfirst.frc.team304.robot.lifting.LiftingSystem;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DataPreprocessor {
 	private Joystick controller;
-	private Sensors sensors;
+	private SensorSystem sensors;
 	private Dashboard dashboard;
 
-	public DataPreprocessor(Joystick controller, Sensors sensors, Dashboard dashboard) {
+	public DataPreprocessor(Joystick controller, SensorSystem sensors, Dashboard dashboard) {
 		this.controller = controller;
 		this.sensors = sensors;
 		this.dashboard = dashboard;
+	}
+
+	public Joystick getController() {
+		return controller;
+	}
+
+	public SensorSystem getSensors() {
+		return sensors;
+	}
+
+	public Dashboard getDashboard() {
+		return dashboard;
 	}
 
 	public boolean isLiftingUpPressed() {

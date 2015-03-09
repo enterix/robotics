@@ -7,13 +7,13 @@ import org.usfirst.frc.team304.robot.systems.SensorSystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class RobotAI {
-	private Sensors sense;
+	private SensorSystem sense;
 	private DrivingSystem base;
 	private LiftingSystem lifter;
 
 	private boolean keepHeightMarker = false;
 
-	public RobotAI(Sensors sense, DrivingSystem base, LiftingSystem lifter) {
+	public RobotAI(SensorSystem sense, DrivingSystem base, LiftingSystem lifter) {
 		this.sense = sense;
 		this.base = base;
 		this.lifter = lifter;

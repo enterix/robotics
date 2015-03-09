@@ -2,13 +2,12 @@ package org.usfirst.frc.team304.robot.data;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
-public class Sensors {
+public class SensorSystem {
 	private DigitalInput photoIn, photoLeftIn, photoRightIn, switchLeftIn,
 			switchRightIn, lifterSensor;
 
-	public Sensors(int photoIn, int photoLeftIn, int photoRightIn,
-			int switchLeftIn, int switchRightIn, int lifterSensor,
-			int controller) {
+	public SensorSystem(int photoIn, int photoLeftIn, int photoRightIn,
+			int switchLeftIn, int switchRightIn, int lifterSensor) {
 		this.photoIn = new DigitalInput(photoIn);
 		this.photoLeftIn = new DigitalInput(photoLeftIn);
 		this.photoRightIn = new DigitalInput(photoRightIn);
@@ -17,7 +16,7 @@ public class Sensors {
 		this.lifterSensor = new DigitalInput(lifterSensor);
 	}
 
-	public Sensors(DigitalInput photoIn, DigitalInput photoLeftIn,
+	public SensorSystem(DigitalInput photoIn, DigitalInput photoLeftIn,
 			DigitalInput photoRightIn, DigitalInput switchLeftIn,
 			DigitalInput switchRightIn, DigitalInput lifterSensor) {
 		this.photoIn = photoIn;

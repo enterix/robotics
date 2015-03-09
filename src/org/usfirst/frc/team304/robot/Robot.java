@@ -4,8 +4,12 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-import org.usfirst.frc.team304.robot.data.Sensors;
+import org.usfirst.frc.team304.robot.data.Dashboard;
+import org.usfirst.frc.team304.robot.data.DataPreprocessor;
+import org.usfirst.frc.team304.robot.data.SensorSystem;
+import org.usfirst.frc.team304.robot.driving.DrivingBot;
 import org.usfirst.frc.team304.robot.driving.DrivingSystem;
+import org.usfirst.frc.team304.robot.lifting.LiftingBot;
 import org.usfirst.frc.team304.robot.lifting.LiftingSystem;
 
 /**
@@ -17,49 +21,60 @@ import org.usfirst.frc.team304.robot.lifting.LiftingSystem;
  */
 public class Robot extends IterativeRobot {
 	PeriodicTester tester;
-	DrivingSystem base;
-	LiftingSystem lifter;
-	Sensors sense;
-
-	Joystick controller;
-
-	RobotAI driver;
+	DataPreprocessor data;
 	
+	ManualControl manual;
+	BotControl bot;
+
 	@Override
 	public void robotInit() {
-		base = new DrivingSystem(RobotMap.lfVictor, RobotMap.lrVictor,
-				RobotMap.rfVictor, RobotMap.rrVictor);
+		DrivingSystem base = new DrivingSystem(RobotMap.lfVictor,
+				RobotMap.lrVictor, RobotMap.rfVictor, RobotMap.rrVictor);
 
-		lifter = new LiftingSystem(RobotMap.liftingLeft, RobotMap.liftingRigth);
+		LiftingSystem lifter = new LiftingSystem(RobotMap.liftingLeft,
+				RobotMap.liftingRigth);
 
-		sense = new Sensors(RobotMap.photoIn, RobotMap.photoLeftIn,
-				RobotMap.photoRightIn, RobotMap.switchLeftIn,
-				RobotMap.switchRightIn, RobotMap.lifterSensor,
-				RobotMap.joystick);
-
-		driver = new RobotAI(sense, base, lifter);
+		SensorSystem sense = new SensorSystem(RobotMap.photoIn,
+				RobotMap.photoLeftIn, RobotMap.photoRightIn,
+				RobotMap.switchLeftIn, RobotMap.switchRightIn,
+				RobotMap.lifterSensor);
+		
+		Dashboard dashboard = new Dashboard();
+		
+		Joystick controller = new Joystick(0);
+		
+		data = new DataPreprocessor(controller, sense, dashboard);
+		
+		DrivingBot dBot = new DrivingBot(base);
+		
+		LiftingBot lBot = new LiftingBot(lifter);
+		
+		manual = new ManualControl(dBot, lBot, data);
+		bot = new BotControl(dBot, lBot, data);
 	}
 
-	/**
-	 * This function is called periodically during operator control
-	 */
+	@Override
 	public void teleopPeriodic() {
-		driver.go();
+		if (isBot())
+			bot.teleop();
+		else
+			manual.teleop();
 	}
 
 	@Override
 	public void testInit() {
-		tester = new PeriodicTester(sense);
+		tester = new PeriodicTester(data);
 	}
-	
-	/**
-	 * This function is called periodically during test mode
-	 */
+
 	@Override
 	public void testPeriodic() {
 		LiveWindow.run();
 
 		tester.toTest();
+	}
+	
+	public boolean isBot() {
+		return false;
 	}
 
 }
